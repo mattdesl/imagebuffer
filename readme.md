@@ -34,7 +34,7 @@ The `setPixel` and `getPixel` methods will handle endianness for you, when using
 
 ## docs & demos
 
-- Documentation
+- [Documentation here](http://mattdesl.github.io/imagebuffer/docs/classes/ImageBuffer.html)
 - Demos:
 	- [Simple Procedural Image](http://mattdesl.github.io/imagebuffer/demos/simple.html)
 	- [Grayscale Image Processing](http://mattdesl.github.io/imagebuffer/demos/grayscale.html)
