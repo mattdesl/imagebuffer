@@ -43,7 +43,13 @@ The `setPixel` and `getPixel` methods will handle endianness for you, when using
 
 ## using with NodeJS
 
-You can `npm install mattdesl/imagebuffer` until there is a stable version on npm. Then it looks like:
+Install:
+
+```
+npm install imagebuffer
+```
+
+Require it in your client-side code:
 
 ```
 var ImageBuffer = require('imagebuffer');
