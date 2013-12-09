@@ -10,6 +10,10 @@
     "yuidoc": "yuidoc -n -o docs .",
     "build": "npm run-script browserify && npm run-script uglify && npm run-script yuidoc"
   },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/mattdesl/imagebuffer.git"
+  },
   "dependencies": {},
   "author": "Matt DesLauriers",
   "license": "BSD-2-Clause",
