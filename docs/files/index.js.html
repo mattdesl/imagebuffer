@@ -442,7 +442,7 @@ ImageBuffer.prototype.getPixel = function(index, out) {
  *
  * Note that the integer is assumed to be packed in the correct endianness. On little-endian
  * the format is 0xAABBGGRR and on big-endian the format is 0xRRGGBBAA. If you want a
- * endian-independent method, use fromInt(rgba) and toInt(r, g, b, a).
+ * endian-independent method, use fromRGBA(rgba) and toRGBA(r, g, b, a).
  * 
  * @method  unpackPixel
  * @static
