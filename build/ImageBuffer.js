@@ -257,7 +257,7 @@ ImageBuffer.NUM_COMPONENTS = 4;
  */
 ImageBuffer.SUPPORTS_32BIT = SUPPORTS_32BIT;
 
-/**
+/** 
  * Will be `true` if little endianness was detected,
  * or `false` if big endian was detected. If we could
  * not detect the endianness (e.g. typed arrays not
