@@ -1,0 +1,127 @@
+<!-- 
+	This is an example of using ImageBuffer with UMD.
+ -->
+<!DOCTYPE HTML>
+<html>
+<head>
+
+	<title>multiply tint</title>
+
+	<!-- This is the UMD build, for non-Node projects -->
+	<script src="../build/ImageBuffer.js" type="text/javascript"></script>	
+</head>
+	
+<body>
+
+	<script>
+	//This is an example of tinting. A common scenario is to have
+	//tinted sprites/bitmap fonts for a game, but without the performance
+	//penalty of using putImageData all the time. 
+
+	//We will use this canvas for rendering.
+	var width = 500;
+	var height = 500;
+	var canvas, ctx;
+
+	//Get the original image
+	var img = new Image();
+	img.onload = start;
+	img.src = "img/font.png";
+
+	//the tinted versions to cache in RRGGBBAA
+	var colors = [
+		0x3366FFFF,
+		0xCC7AA3FF,
+		0xFF3300FF,
+		0x33CC33FF,
+		0x663380FF,
+		0x66FF3380, //0.50% opacity
+	];
+
+	//the first sprite is our original untinted image
+	var sprites = [ img ];
+	var frame = 0;
+	var lastCanvas = null;
+
+	//generate multiple images from a single one.
+	function start() {
+		canvas = document.createElement("canvas");
+		ctx = canvas.getContext("2d");
+		canvas.width = width;
+		canvas.height = height;
+		canvas.style.background = "gray";
+		
+		document.body.appendChild(canvas);
+
+		//Now let's generate some cachd tint versions...
+		generateTintImages();
+		
+		render();
+		setInterval(render, 1000);
+	}
+
+	function generateTintImages() {
+		console.log("Processing...");
+
+		//for this we're going to use a "shared" context
+		//each call to createImage will use this
+		var sharedCanvas = document.createElement("canvas");
+		sharedCanvas.width = img.width;
+		sharedCanvas.height = img.height;
+
+		var sharedContext = sharedCanvas.getContext("2d");
+
+		//draw the image to the screen
+		sharedContext.drawImage(img, 0, 0);
+
+
+		//get its data
+		var imageData = sharedContext.getImageData(0, 0, img.width, img.height);
+
+		//this holds the pixels of our original. 
+		var original = new ImageBuffer(imageData);
+
+		//this will hold the new pixels...
+		var buffer = new ImageBuffer(img.width, img.height);
+
+		//we will use a temporary color object to reduce allocations
+		var tmpColor = ImageBuffer.createColor();
+
+
+		//for each color
+		for (var i=0; i<colors.length; i++) {
+			//convert it to an object with r, g, b, a components
+			var c = ImageBuffer.fromRGBA( colors[i] );
+
+			//multiply pixels with color
+			for (var n=0; n<buffer.width * buffer.height; n++) {
+				//we can use buffer.getPixel .. or just access the uint8 array directly:
+				var origAlpha = original.uint8[n * 4 + 3];
+
+				//multiply by other color and divide by 256
+				var a = (origAlpha * c.a) >> 8;
+
+				//we override RGB with the new color
+				buffer.setPixel(n, c.r, c.g, c.b, a);
+			}
+
+			//cache the image
+			var cachedImage = buffer.createImage(sharedContext);
+			sprites.push( cachedImage );
+			console.log("Created tint:", c);
+		}
+
+		lastCanvas = sharedCanvas;
+
+		console.log("Done processing");
+	}
+
+	function render() {
+		ctx.clearRect(0, 0, width, height);
+
+		ctx.drawImage(sprites[frame % sprites.length], 0, 0);
+		frame++;
+	}
+	</script>
+</body>
+</html> 

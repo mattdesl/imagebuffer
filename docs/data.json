@@ -1,0 +1,396 @@
+{
+    "project": {},
+    "files": {
+        "index.js": {
+            "name": "index.js",
+            "modules": {},
+            "classes": {
+                "ImageBuffer": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "ImageBuffer": {
+            "name": "ImageBuffer",
+            "shortname": "ImageBuffer",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "index.js",
+            "line": 44,
+            "description": "An ImageBuffer is a simple array of pixels that make up an image.\nInt32Array is used for better performance if supported, otherwise\nsimple 8-bit manipulation is used as a fallback.\n\nTo use this class; construct a new ImageBuffer with the specified dimensions, and modify\nits pixels with either setPixel/getPixel or setPixelAt/getPixelAt\nmethods. Then, you can use the buffer.apply(imageData) to apply the changes to\na shared ImageData object.\n\nYou can also cache the image for later use by calling createImage(). Note that\nthis is an expensive operation which should be used wisely.\n\nIf you pass an ImageData object as the first parameter to the constructor, instead\nof width and height, any changes to the pixels array should be reflected immediately \non the given ImageData object. In such a case, apply() has no effect.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "width",
+                    "description": "the width of the image",
+                    "type": "Number"
+                },
+                {
+                    "name": "height",
+                    "description": "the height of the image",
+                    "type": "Number"
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "index.js",
+            "line": 113,
+            "description": "This is a utility function to set the color at the specified X and Y \nposition (from top left).",
+            "itemtype": "method",
+            "name": "setPixelAt",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "the x position to modify",
+                    "type": "Number"
+                },
+                {
+                    "name": "y",
+                    "description": "the y position to modify",
+                    "type": "Number"
+                },
+                {
+                    "name": "r",
+                    "description": "the red byte, 0-255",
+                    "type": "Number"
+                },
+                {
+                    "name": "g",
+                    "description": "the green byte, 0-255",
+                    "type": "Number"
+                },
+                {
+                    "name": "b",
+                    "description": "the blue byte, 0-255",
+                    "type": "Number"
+                },
+                {
+                    "name": "a",
+                    "description": "the alpha byte, 0-255",
+                    "type": "Number"
+                }
+            ],
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 130,
+            "description": "This is a utility function to set the color at the specified X and Y \nposition (from top left).",
+            "itemtype": "method",
+            "name": "getColorAt",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "the x position to modify",
+                    "type": "Number"
+                },
+                {
+                    "name": "y",
+                    "description": "the y position to modify",
+                    "type": "Number"
+                },
+                {
+                    "name": "out",
+                    "description": "the color object with `r, g, b, a` properties, or null",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "a color representing the pixel at that location",
+                "type": "Object"
+            },
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 145,
+            "description": "Creates a new Image object from this ImageBuffer.",
+            "itemtype": "method",
+            "name": "createImage",
+            "params": [
+                {
+                    "name": "context",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 192,
+            "description": "Applies this buffer's pixels to an ImageData object. If\nthe supplied ImageData is strictly equal to this buffer's\nImageData, and we are modifying pixels directly, then this call does\nnothing. \n\nYou can provide another ImageBuffer object, which essentially copies\nthis buffer's pixels to the specified ImageBuffer. If the specified ImageBuffer\nis \"directly\" modifying its own ImageData's pixels, then it should be updated\nimmediately.",
+            "itemtype": "method",
+            "name": "apply",
+            "params": [
+                {
+                    "name": "imageData",
+                    "description": "the image data or ImageBuffer",
+                    "type": "ImageData|ImageBuffer"
+                }
+            ],
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 242,
+            "description": "Will be `true` if this context supports 32bit pixel\nmaipulation using array buffer views.",
+            "itemtype": "attribute",
+            "name": "SUPPORTS_32BIT",
+            "readonly": "",
+            "static": 1,
+            "final": 1,
+            "type": "{Boolean}",
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 254,
+            "description": "Will be `true` if little endianness was detected,\nor `false` if big endian was detected. If we could\nnot detect the endianness (e.g. typed arrays not\navailable, spec not implemented correctly), then\nthis value will be null.",
+            "itemtype": "attribute",
+            "name": "LITTLE_ENDIAN",
+            "readonly": "",
+            "static": 1,
+            "final": 1,
+            "type": "{Boolean|null}",
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 269,
+            "description": "Sets the pixel at the given index of the ImageBuffer's \"data\" array,\nwhich might be a Int32Array (modern browsers) or CanvasPixelArray (fallback),\ndepending on the context's capabilities. Also takes endianness into account.",
+            "itemtype": "method",
+            "name": "setPixel",
+            "params": [
+                {
+                    "name": "pixels",
+                    "description": "the pixels data from ImageBuffer",
+                    "type": "Int32Array|CanvasPixelArray"
+                },
+                {
+                    "name": "index",
+                    "description": "the offset in the data to manipulate",
+                    "type": "Number"
+                },
+                {
+                    "name": "r",
+                    "description": "the red byte, 0-255",
+                    "type": "Number"
+                },
+                {
+                    "name": "g",
+                    "description": "the green byte, 0-255",
+                    "type": "Number"
+                },
+                {
+                    "name": "b",
+                    "description": "the blue byte, 0-255",
+                    "type": "Number"
+                },
+                {
+                    "name": "a",
+                    "description": "the alpha byte, 0-255",
+                    "type": "Number"
+                }
+            ],
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 304,
+            "description": "Gets the pixel at the given index of the ImageBuffer's \"data\" array,\nwhich might be a Int32Array (modern browsers) or CanvasPixelArray (fallback),\ndepending on the context's capabilities. Also takes endianness into account.\n\nThe returned value is an object containing the color components as bytes (0-255)\nin `r, g, b, a`. If `out` is specified, it will use that instead to reduce object creation.",
+            "itemtype": "method",
+            "name": "getPixel",
+            "params": [
+                {
+                    "name": "pixels",
+                    "description": "the pixels data from ImageBuffer",
+                    "type": "Int32Array|CanvasPixelArray"
+                },
+                {
+                    "name": "index",
+                    "description": "the offset in the data to grab the color",
+                    "type": "Number"
+                },
+                {
+                    "name": "out",
+                    "description": "the color object with `r, g, b, a` properties, or null",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "a color representing the pixel at that location",
+                "type": "Object"
+            },
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 330,
+            "description": "Packs the r, g, b, a components into a single integer, for use with\nInt32Array. If LITTLE_ENDIAN, then ABGR order is used. Otherwise,\nRGBA order is used.",
+            "itemtype": "method",
+            "name": "packPixel",
+            "static": 1,
+            "params": [
+                {
+                    "name": "r",
+                    "description": "the red byte, 0-255",
+                    "type": "Number"
+                },
+                {
+                    "name": "g",
+                    "description": "the green byte, 0-255",
+                    "type": "Number"
+                },
+                {
+                    "name": "b",
+                    "description": "the blue byte, 0-255",
+                    "type": "Number"
+                },
+                {
+                    "name": "a",
+                    "description": "the alpha byte, 0-255",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "the packed color",
+                "type": "Number"
+            },
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 344,
+            "description": "Unpacks the r, g, b, a components into the specified color object, or a new\nobject, for use with Int32Array. If LITTLE_ENDIAN, then ABGR order is used when \nunpacking, otherwise, RGBA order is used. The resulting color object has the\n`r, g, b, a` properties which are unrelated to endianness.\n\nNote that the integer is assumed to be packed in the correct endianness. On little-endian\nthe format is 0xAABBGGRR and on big-endian the format is 0xRRGGBBAA. If you want a\nendian-independent method, use fromInt(rgba) and toInt(r, g, b, a).",
+            "itemtype": "method",
+            "name": "unpackPixel",
+            "static": 1,
+            "params": [
+                {
+                    "name": "rgba",
+                    "description": "the integer, packed in endian order by packPixel",
+                    "type": "Number"
+                },
+                {
+                    "name": "out",
+                    "description": "the color object with `r, g, b, a` properties, or null",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "a color representing the pixel at that location",
+                "type": "Object"
+            },
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 388,
+            "description": "A utility to convert an integer in 0xRRGGBBAA format to a color object.\nThis does not rely on endianness.",
+            "itemtype": "method",
+            "name": "fromInt",
+            "static": 1,
+            "params": [
+                {
+                    "name": "rgba",
+                    "description": "an RGBA hex",
+                    "type": "Number"
+                },
+                {
+                    "name": "out",
+                    "description": "the object to use, optional",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "a color object",
+                "type": "Object"
+            },
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 408,
+            "description": "A utility to convert RGBA components to a 32 bit integer\nin RRGGBBAA format.",
+            "itemtype": "method",
+            "name": "fromInt",
+            "static": 1,
+            "params": [
+                {
+                    "name": "r",
+                    "description": "the r color component (0 - 255)",
+                    "type": "Number"
+                },
+                {
+                    "name": "g",
+                    "description": "the g color component (0 - 255)",
+                    "type": "Number"
+                },
+                {
+                    "name": "b",
+                    "description": "the b color component (0 - 255)",
+                    "type": "Number"
+                },
+                {
+                    "name": "a",
+                    "description": "the a color component (0 - 255)",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "a RGBA-packed 32 bit integer",
+                "type": "Number"
+            },
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 424,
+            "description": "A utility function to create a lightweight 'color'\nobject with the default components. Any components\nthat are not specified will default to zero.\n\nThis is useful when you want to use a shared color\nobject for the getPixel and getPixelAt methods.",
+            "itemtype": "method",
+            "name": "createColor",
+            "static": 1,
+            "params": [
+                {
+                    "name": "r",
+                    "description": "the r color component (0 - 255)",
+                    "type": "Number"
+                },
+                {
+                    "name": "g",
+                    "description": "the g color component (0 - 255)",
+                    "type": "Number"
+                },
+                {
+                    "name": "b",
+                    "description": "the b color component (0 - 255)",
+                    "type": "Number"
+                },
+                {
+                    "name": "a",
+                    "description": "the a color component (0 - 255)",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "the resulting color object, with r, g, b, a properties",
+                "type": "Object"
+            },
+            "class": "ImageBuffer"
+        }
+    ],
+    "warnings": []
+}

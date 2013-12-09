@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+	<title>grayscale filter</title>
+
+	<!-- This is the UMD build, for non-Node projects -->
+	<script src="../build/ImageBuffer.js" type="text/javascript"></script>
+
+
+	<script>
+	var img = new Image();
+	img.onload = run;
+	img.src = "img/lenna.png";
+
+	function run() {
+		var width = img.width;
+		var height = img.height;
+
+		var canvas = document.createElement("canvas");
+		var ctx = canvas.getContext("2d");
+		canvas.width = width;
+		canvas.height = height;
+
+		document.body.appendChild(canvas);
+			
+		//draw the image to the canvas...
+		ctx.drawImage(img, 0, 0);
+
+		//now grab its pixel data
+		var imageData = ctx.getImageData(0, 0, width, height);
+
+		//make a new image buffer for direct manipulation
+		var buffer = new ImageBuffer(imageData);
+
+		//util to create a lightweight object -- { r:0, g:0, b:0, a:0 }
+		var color = ImageBuffer.createColor();
+
+		for (var i=0; i<width*height; i++) {
+			// put the color into our temp object
+			buffer.getPixel(i, color);
+
+			// CIE luminance for the RGB
+			var v = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
+
+			// set the pixel, using original alpha
+			buffer.setPixel(i, v, v, v, color.a);
+		}
+		
+		ctx.putImageData(imageData, 0, 0);
+	}
+	</script>
+</head>
+	
+<body>
+
+</body>
+</html> 

@@ -1,3 +1,4 @@
+!function(e){"object"==typeof exports?module.exports=e():"function"==typeof define&&define.amd?define(e):"undefined"!=typeof window?window.ImageBuffer=e():"undefined"!=typeof global?global.ImageBuffer=e():"undefined"!=typeof self&&(self.ImageBuffer=e())}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 function isLittleEndian() {
     //could use a more robust check here ....
     var a = new ArrayBuffer(4);
@@ -43,51 +44,57 @@ var SUPPORTS_32BIT =
 
 /**
  * An ImageBuffer is a simple array of pixels that make up an image.
- * We attempt to use Int32Array for a performance boost, but if
- * it isn't supported it will fall back to simple 8-bit manipulation.
+ * Int32Array is used for better performance if supported, otherwise
+ * simple 8-bit manipulation is used as a fallback.
  *
- * To use; construct a new ImageBuffer with the specified dimensions, and modify
- * its pixels with either setColor/getColor or the static setPixel/getPixel
+ * To use this class; construct a new ImageBuffer with the specified dimensions, and modify
+ * its pixels with either setPixel/getPixel or setPixelAt/getPixelAt
  * methods. Then, you can use the buffer.apply(imageData) to apply the changes to
  * a shared ImageData object.
  *
- * If you pass an ImageData object to the constructor, the pixel modifications will
- * be "direct" and there will be no need to call apply() (in fact -- apply will have
- * no effect if called when "direct" modification is true).
- *
  * You can also cache the image for later use by calling createImage(). Note that
- * this is a very expensive operation which should be used wisely.
- *
+ * this is an expensive operation which should be used wisely.
+ * 
+ * If you pass an ImageData object as the first parameter to the constructor, instead
+ * of width and height, any changes to the pixels array should be reflected immediately 
+ * on the given ImageData object. In such a case, apply() has no effect.
+ * 
  * @class  ImageBuffer
  * @constructor
  * @param  {Number} width      the width of the image
  * @param  {Number} height     the height of the image
- * @param  {ImageData} imageData optional imageData for 'direct' modification of pixels
  */
-var ImageBuffer = function(width, height, imageData) {
-    if ((width !== 0 && !width) || (height !== 0 && !height))
-        throw new Error("width and height must be defined for ImageBuffer");
+var ImageBuffer = function(width, height) {
+    this.imageData = null;
+
+    if (typeof width !== "number") { //first argument is non-numerical.. must be ImageData
+        this.imageData = width;
+        width = this.imageData.width;
+        height = this.imageData.height;
+    }
+
+    this.width = width;
+    this.height = height;
+
+    
 
     this.pixels = null;
     this.direct = false;
-    this.width = width;
-    this.height = height;
     this.uint8 = null;
 
-    this.imageData = imageData;
 
     //If an ImageData is provided, we will try to manipulate its array directly.
-    if (imageData) {
+    if (this.imageData) {
         this.direct = true;
 
         //we can do direct manipulation
         if (SUPPORTS_32BIT) {
-            this.uint8 = imageData.data;
+            this.uint8 = this.imageData.data;
             this.pixels = new Int32Array(this.uint8.buffer);
         } 
         //CanvasPixelArray + 8bit data... :(
         else {
-            this.pixels = this.uint8 = imageData.data;
+            this.pixels = this.uint8 = this.imageData.data;
         }
     } else {
         //use a separate buffer
@@ -106,9 +113,9 @@ ImageBuffer.prototype.constructor = ImageBuffer;
 
 /**
  * This is a utility function to set the color at the specified X and Y 
- * position (from top left). For performance-critical loops, you may want to use
- * ImageBuffer.setPixel and ImageBuffer.getPixel instead.
- * 
+ * position (from top left). 
+ *
+ * @method  setPixelAt
  * @param {Number} x    the x position to modify
  * @param {Number} y    the y position to modify
  * @param {Number} r the red byte, 0-255
@@ -116,28 +123,30 @@ ImageBuffer.prototype.constructor = ImageBuffer;
  * @param {Number} b the blue byte, 0-255
  * @param {Number} a the alpha byte, 0-255
  */
-ImageBuffer.prototype.setColor = function(x, y, r, g, b, a) {
+ImageBuffer.prototype.setPixelAt = function(x, y, r, g, b, a) {
     var i = ~~(x + (y * this.width));
-    ImageBuffer.setPixel(this.pixels, i, r, g, b, a);
+    this.setPixel(i, r, g, b, a);
 };
 
 /**
  * This is a utility function to set the color at the specified X and Y 
- * position (from top left). For performance-critical loops, you may want to use
- * ImageBuffer.setPixel and ImageBuffer.getPixel instead.
+ * position (from top left). 
  * 
+ * @method  getColorAt
  * @param {Number} x    the x position to modify
  * @param {Number} y    the y position to modify
  * @param {Number} out  the color object with `r, g, b, a` properties, or null
  * @return {Object} a color representing the pixel at that location
  */
-ImageBuffer.prototype.getColor = function(x, y, out) {
+ImageBuffer.prototype.getColorAt = function(x, y, out) {
     var i = ~~(x + (y * this.width));
-    return ImageBuffer.getPixel(this.pixels, i, out);
+    return this.getPixel(i, out);
 };
 
 /**
  * Creates a new Image object from this ImageBuffer.
+ *
+ * @method  createImage
  * @param  {[type]} context [description]
  * @return {[type]}         [description]
  */
@@ -156,7 +165,7 @@ ImageBuffer.prototype.createImage = function(context) {
 
     canvas.width = this.width;
     canvas.height = this.height;
-
+    
     var imageData = this.imageData;
 
     //if we need to first apply the image.... do so here:
@@ -166,6 +175,7 @@ ImageBuffer.prototype.createImage = function(context) {
     }
 
     //put the data onto the context
+    context.clearRect(0, 0, this.width, this.height);
     context.putImageData(imageData, 0, 0);  
 
     //create a new image object
@@ -190,7 +200,8 @@ ImageBuffer.prototype.createImage = function(context) {
  * this buffer's pixels to the specified ImageBuffer. If the specified ImageBuffer
  * is "directly" modifying its own ImageData's pixels, then it should be updated
  * immediately. 
- * 
+ *
+ * @method  apply
  * @param  {ImageData|ImageBuffer} imageData the image data or ImageBuffer
  */
 ImageBuffer.prototype.apply = function(imageData) {
@@ -262,7 +273,6 @@ ImageBuffer.LITTLE_ENDIAN = LITTLE_ENDIAN;
  * depending on the context's capabilities. Also takes endianness into account.
  *
  * @method  setPixel
- * @static
  * @param {Int32Array|CanvasPixelArray} pixels the pixels data from ImageBuffer
  * @param {Number} index the offset in the data to manipulate
  * @param {Number} r the red byte, 0-255
@@ -271,6 +281,26 @@ ImageBuffer.LITTLE_ENDIAN = LITTLE_ENDIAN;
  * @param {Number} a the alpha byte, 0-255
  */
 
+if (SUPPORTS_32BIT) {
+    if (LITTLE_ENDIAN) {
+        ImageBuffer.prototype.setPixel = function(index, r, g, b, a) {
+            this.pixels[index] = (a << 24) | (b << 16) | (g <<  8) | r;
+        };
+    } else {
+        ImageBuffer.prototype.setPixel = function(index, r, g, b, a) {
+            this.pixels[index] = (r << 24) | (g << 16) | (b <<  8) | a;
+        };
+    }
+} else {
+    ImageBuffer.prototype.setPixel = function(index, r, g, b, a) {
+        var pixels = this.pixels;
+        index *= 4;
+        pixels[index] = r;
+        pixels[++index] = g;
+        pixels[++index] = b;
+        pixels[++index] = a;
+    };
+}
 
 /**
  * Gets the pixel at the given index of the ImageBuffer's "data" array,
@@ -281,56 +311,29 @@ ImageBuffer.LITTLE_ENDIAN = LITTLE_ENDIAN;
  * in `r, g, b, a`. If `out` is specified, it will use that instead to reduce object creation.
  *
  * @method  getPixel
- * @static
  * @param {Int32Array|CanvasPixelArray} pixels the pixels data from ImageBuffer
  * @param {Number} index the offset in the data to grab the color
  * @param {Number} out  the color object with `r, g, b, a` properties, or null
  * @return {Object} a color representing the pixel at that location
  */
-
-
-if (SUPPORTS_32BIT) {
-    if (LITTLE_ENDIAN) {
-        ImageBuffer.setPixel = function(pixels, index, r, g, b, a) {
-            pixels[index] = (a << 24) | (b << 16) | (g <<  8) | r;
-        };
-    } else {
-        ImageBuffer.setPixel = function(pixels, index, r, g, b, a) {
-            pixels[index] = (r << 24) | (g << 16) | (b <<  8) | a;
-        };
-    }
-
-    ImageBuffer.getPixel = function(pixels, index, out) {
-        return ImageBuffer.unpackRGBA(pixels[index], out);
-    };
-} else {
-    ImageBuffer.setPixel = function(pixels, index, r, g, b, a) {
-        index *= 4;
-        pixels[index] = r;
-        pixels[++index] = g;
-        pixels[++index] = b;
-        pixels[++index] = a;
-    };
-
-    ImageBuffer.getPixel = function(pixels, index, out) {
-        index *= 4;
-        if (!out)
-            out = {r:0, g:0, b:0, a:0};
-        out.r = pixels[index];
-        out.g = pixels[++index];
-        out.b = pixels[++index];
-        out.a = pixels[++index];
-        return out;
-    };
-}
-
+ImageBuffer.prototype.getPixel = function(index, out) {
+    var pixels = this.uint8;
+    index *= 4;
+    if (!out)
+        out = {r:0, g:0, b:0, a:0};
+    out.r = pixels[index];
+    out.g = pixels[++index];
+    out.b = pixels[++index];
+    out.a = pixels[++index];
+    return out;
+};
 
 /**
  * Packs the r, g, b, a components into a single integer, for use with
  * Int32Array. If LITTLE_ENDIAN, then ABGR order is used. Otherwise,
  * RGBA order is used.
  *
- * @method  packRGBA
+ * @method  packPixel
  * @static
  * @param {Number} r the red byte, 0-255
  * @param {Number} g the green byte, 0-255
@@ -344,18 +347,22 @@ if (SUPPORTS_32BIT) {
  * object, for use with Int32Array. If LITTLE_ENDIAN, then ABGR order is used when 
  * unpacking, otherwise, RGBA order is used. The resulting color object has the
  * `r, g, b, a` properties which are unrelated to endianness.
+ *
+ * Note that the integer is assumed to be packed in the correct endianness. On little-endian
+ * the format is 0xAABBGGRR and on big-endian the format is 0xRRGGBBAA. If you want a
+ * endian-independent method, use fromInt(rgba) and toInt(r, g, b, a).
  * 
- * @method  unpackRGBA
+ * @method  unpackPixel
  * @static
- * @param {Number} rgba the integer, packed in endian order by packRGBA
+ * @param {Number} rgba the integer, packed in endian order by packPixel
  * @param {Number} out  the color object with `r, g, b, a` properties, or null
  * @return {Object} a color representing the pixel at that location
  */
 if (LITTLE_ENDIAN) {
-    ImageBuffer.packRGBA = function(r, g, b, a) {
+    ImageBuffer.packPixel = function(r, g, b, a) {
         return (a << 24) | (b << 16) | (g <<  8) | r;
     };
-    ImageBuffer.unpackRGBA = function(rgba, out) {
+    ImageBuffer.unpackPixel = function(rgba, out) {
         if (!out)
             out = {r:0, g:0, b:0, a:0};
         out.a = ((rgba & 0xff000000) >>> 24);
@@ -365,10 +372,10 @@ if (LITTLE_ENDIAN) {
         return out;
     };
 } else {
-    ImageBuffer.packRGBA = function(r, g, b, a) {
+    ImageBuffer.packPixel = function(r, g, b, a) {
         return (r << 24) | (g << 16) | (b <<  8) | a;
     };
-    ImageBuffer.unpackRGBA = function(rgba, out) {
+    ImageBuffer.unpackPixel = function(rgba, out) {
         if (!out)
             out = {r:0, g:0, b:0, a:0};
         out.r = ((rgba & 0xff000000) >>> 24);
@@ -379,5 +386,69 @@ if (LITTLE_ENDIAN) {
     };
 }
 
+/**
+ * A utility to convert an integer in 0xRRGGBBAA format to a color object.
+ * This does not rely on endianness.
+ *
+ * @method  fromInt
+ * @static
+ * @param  {Number} rgba an RGBA hex
+ * @param  {Object} out the object to use, optional
+ * @return {Object} a color object
+ */
+ImageBuffer.fromRGBA = function(rgba, out) {
+    if (!out)
+        out = {r:0, g:0, b:0, a:0};
+    out.r = ((rgba & 0xff000000) >>> 24);
+    out.g = ((rgba & 0x00ff0000) >>> 16);
+    out.b = ((rgba & 0x0000ff00) >>> 8);
+    out.a = ((rgba & 0x000000ff));
+    return out;
+};
+
+/**
+ * A utility to convert RGBA components to a 32 bit integer
+ * in RRGGBBAA format.
+ *
+ * @method  fromInt
+ * @static
+ * @param  {Number} r the r color component (0 - 255)
+ * @param  {Number} g the g color component (0 - 255)
+ * @param  {Number} b the b color component (0 - 255)
+ * @param  {Number} a the a color component (0 - 255)
+ * @return {Number} a RGBA-packed 32 bit integer
+ */
+ImageBuffer.toRGBA = function(r, g, b, a) {
+    return (r << 24) | (g << 16) | (b <<  8) | a;
+};
+
+/**
+ * A utility function to create a lightweight 'color'
+ * object with the default components. Any components
+ * that are not specified will default to zero.
+ *
+ * This is useful when you want to use a shared color
+ * object for the getPixel and getPixelAt methods.
+ *
+ * @method  createColor
+ * @static
+ * @param  {Number} r the r color component (0 - 255)
+ * @param  {Number} g the g color component (0 - 255)
+ * @param  {Number} b the b color component (0 - 255)
+ * @param  {Number} a the a color component (0 - 255)
+ * @return {Object}   the resulting color object, with r, g, b, a properties
+ */
+ImageBuffer.createColor = function(r, g, b, a) {
+    return {
+        r: r||0,
+        g: g||0,
+        b: b||0,
+        a: a||0
+    };
+};
 
 module.exports = ImageBuffer;
+},{}]},{},[1])
+(1)
+});
+;

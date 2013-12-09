@@ -1,29 +1,63 @@
-# about
+#about 
 
-klimt is a small library for image pixel manipulation in 2D canvas or WebGL.
+A small utility for per-pixel image manipulation with Canvas / WebGL. 
 
-# features
-
-- uses array buffer views for altering pixels: 
+It uses an Int32Array view to directly modify the Uint8ClampedArray buffer of ImageData. If unsupported, it falls back to standard 8-bit modifications. The basic idea is here:
 https://hacks.mozilla.org/2011/12/faster-canvas-pixel-manipulation-with-typed-arrays/
-- fallback to regular image adjustments
-- 
 
+The code looks like this:
 
+```javascript
+//create an empty ImageData
+var imageData = ctx.createImageData(0, 0, width, height);
 
+//make a new ImageBuffer for direct manipulation of that ImageData
+var buffer = new ImageBuffer(imageData);
 
-var img = new ImageBuffer(250, 250);
+//do your per-piel operations with setPixel and getPixel
+//or act directly on buffer.uint8
+for (var i=0; i < width * height; i++) {
+	var r = 0,
+		g = ( i/(width*height) ) * 256, //simple linear gradient
+		b = 0,
+		a = 0;
 
-//an Int32Array of ARGB-packd integers for little-endian machines
-// or RGBA-packed for big-endian
-var pixels = img.pixels;
-var littleEndian = ImageBuffer.LITTLE_ENDIAN;
+	// set the pixel, using original alpha
+	buffer.setPixel(i, r, g, b, a);
+}
 
-for ( ... )
-	manipulate the pixels array...
+//place the data onto the canvas
+ctx.putImageData(imageData, 0, 0);
+```
 
+The `setPixel` and `getPixel` methods will handle endianness for you, when using the more performant 32-bit approach. 
 
+## using with NodeJS
 
+You can `npm install mattdesl/imagebuffer` until there is a stable version on npm. Then it looks like:
 
-//place pixels into a WebGL texture:
-var tex = new Texture(0, 0, width, height, )
+```
+var ImageBuffer = require('imagebuffer');
+```
+
+## using without NodeJS
+
+You can grab the minified UMD version inside the `build` folder.
+
+## using with WebGL
+
+You need to wrap the `Uint8ClampedArray` as a `Uint8Array`, like so:
+
+```
+var type = gl.UNSIGNED_BYTE;
+var data = new Uint8Array(buffer.uint8);
+```
+
+# building
+
+To browserify, minify, and generate docs, run:
+
+```
+npm run-script build
+```
+

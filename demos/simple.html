@@ -1,16 +1,50 @@
-<!-- 
-	This is an example of using imagebuffer with UMD. 
- -->
 <!DOCTYPE HTML>
 <html>
 <head>
 
 	<title>simple imagebuffer</title>
 
-	<!-- The source file. -->
-	<script src="src/main.js" type="text/javascript"></script>
-</head>
+	<!-- This is the UMD build, for non-Node projects -->
+	<script src="../build/ImageBuffer.js" type="text/javascript"></script>
 
-<body>
+
+	<script>
+	function run() {
+		var width = 150;
+		var height = 150;
+
+		var canvas = document.createElement("canvas");
+		var ctx = canvas.getContext("2d");
+		canvas.width = width;
+		canvas.height = height;
+
+		document.body.appendChild(canvas);
+		
+		//create some empty image data
+		var imageData = ctx.createImageData(width, height);
+
+		//create a new buffer that wraps the data... 
+		//changes to this buffer are reflected in the ImageData 
+		var buffer = new ImageBuffer(imageData);
+
+		//do some per-pixel modifications
+		for (var i=0; i<width*height; i++) {
+			//floors the x and y to positive numbers, using bitwise shift
+			var y = (i / width) >> 0;
+			var x = (i - width*y) >> 0;
+
+			//get a value from 0 to 255 for red
+			var red = (x/width)*255;
+
+			buffer.setPixel(i, red, 0, 0, 255);
+		}
+
+		ctx.putImageData(imageData, 0, 0);
+	}
+	</script>
+</head>
+	
+<body onload="run()">
+
 </body>
 </html> 
