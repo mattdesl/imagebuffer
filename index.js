@@ -128,8 +128,8 @@ ImageBuffer.prototype.setPixelAt = function(x, y, r, g, b, a) {
 };
 
 /**
- * This is a utility function to set the color at the specified X and Y 
- * position (from top left). 
+ * This is a utility function to get the color at the specified X and Y 
+ * position (from top left). You can specify a color object to reduce allocations.
  * 
  * @method  getColorAt
  * @param {Number} x    the x position to modify
