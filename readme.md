@@ -2,7 +2,7 @@
 
 A small utility for per-pixel image manipulation with Canvas / WebGL. 
 
-It uses an Int32Array view to directly modify the Uint8ClampedArray buffer of ImageData. If unsupported, it falls back to standard 8-bit modifications. The basic idea is here:
+It uses an Int32Array view to directly modify the Uint8ClampedArray buffer of ImageData. If unsupported, it falls back to standard 8-bit modifications. The basic idea is here:  
 https://hacks.mozilla.org/2011/12/faster-canvas-pixel-manipulation-with-typed-arrays/
 
 The code looks like this:
@@ -30,7 +30,16 @@ for (var i=0; i < width * height; i++) {
 ctx.putImageData(imageData, 0, 0);
 ```
 
-The `setPixel` and `getPixel` methods will handle endianness for you, when using the more performant 32-bit approach. 
+The `setPixel` and `getPixel` methods will handle endianness for you, when using the more performant 32-bit approach. ImageBuffer also includes a few other useful functions, like creating a new Image object from an ImageData source.
+
+## docs & demos
+
+- Documentation
+- Demos:
+	- [Simple Procedural Image](http://mattdesl.github.io/imagebuffer/demos/simple.html)
+	- [Grayscale Image Processing](http://mattdesl.github.io/imagebuffer/demos/grayscale.html)
+	- [Cache Tinted Images](http://mattdesl.github.io/imagebuffer/demos/tint.html)
+	- [WebGL example](http://mattdesl.github.io/imagebuffer/demos/webgl.html)
 
 ## using with NodeJS
 
