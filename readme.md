@@ -2,7 +2,7 @@
 
 Fast per-pixel image manipulation with Canvas / WebGL. 
 
-Instead of manipulating the data in 8 bits (separate R, G, B, A components), we modify a Int32Array which is backed by the ImageData's Uint8ClampedArray buffer. If unsupported, we fall back to 8bit modification. The basic idea is here:
+Instead of manipulating the data in 8 bits (separate R, G, B, A components), we modify a Int32Array which is backed by the ImageData's Uint8ClampedArray buffer. If unsupported, we fall back to 8bit modification. The concept is discussed here:  
 https://hacks.mozilla.org/2011/12/faster-canvas-pixel-manipulation-with-typed-arrays/
 
 The code looks like this:
