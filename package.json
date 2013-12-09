@@ -1,0 +1,13 @@
+{
+  "name": "imagebuffer",
+  "version": "0.0.0",
+  "description": "Fast per-pixel manipualtion in Canvas/WebGL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+  },
+  "author": "Matt DesLauriers",
+  "license": "BSD-2-Clause"
+}
