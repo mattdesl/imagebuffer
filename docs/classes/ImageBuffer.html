@@ -280,16 +280,7 @@ on the given ImageData object. In such a case, apply() has no effect.</p>
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_fromInt">fromInt</a>
-
-                                
-                                    <span class="flag static">static</span>
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_fromInt">fromInt</a>
+                                <a href="#method_fromRGBA">fromRGBA</a>
 
                                 
                                     <span class="flag static">static</span>
@@ -330,6 +321,15 @@ on the given ImageData object. In such a case, apply() has no effect.</p>
                             <li class="index-item method">
                                 <a href="#method_setPixelAt">setPixelAt</a>
 
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_toRGBA">toRGBA</a>
+
+                                
+                                    <span class="flag static">static</span>
                                 
                                 
                             </li>
@@ -417,7 +417,7 @@ on the given ImageData object. In such a case, apply() has no effect.</p>
             
         
         
-        <a href="../files/index.js.html#l192"><code>index.js:192</code></a>
+        <a href="../files/index.js.html#l197"><code>index.js:197</code></a>
         
         </p>
 
@@ -537,7 +537,7 @@ immediately.</p>
             
         
         
-        <a href="../files/index.js.html#l424"><code>index.js:424</code></a>
+        <a href="../files/index.js.html#l429"><code>index.js:429</code></a>
         
         </p>
 
@@ -669,7 +669,7 @@ object for the getPixel and getPixelAt methods.</p>
 
     
         <span class="returns-inline">
-            <span class="type">type</span>
+            <span class="type">Image</span>
         </span>
     
 
@@ -707,7 +707,11 @@ object for the getPixel and getPixelAt methods.</p>
     </div>
 
     <div class="description">
-        <p>Creates a new Image object from this ImageBuffer.</p>
+        <p>Creates a new Image object from this ImageBuffer. You can pass 
+a context to re-use, otherwise this method will create a new canvas
+and get its 2d context. This method uses toDataURL to generate
+a new Image.</p>
+<p>Note that this is not supported on older 2.x Android devices.</p>
 
     </div>
 
@@ -720,13 +724,13 @@ object for the getPixel and getPixelAt methods.</p>
                 <li class="param">
                     
                         <code class="param-name">context</code>
-                        <span class="type">type</span>
+                        <span class="type">CanvasRenderingContext</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>[description]</p>
+                        <p>the canvas 2D rendering context</p>
 
                     </div>
 
@@ -744,9 +748,9 @@ object for the getPixel and getPixelAt methods.</p>
             <div class="returns-description">
                 
                     
-                        <span class="type">type</span>:
+                        <span class="type">Image</span>:
                     
-                    <p>[description]</p>
+                    <p>a new Image object with the data URI of your ImageBuffer</p>
 
                 
             </div>
@@ -757,184 +761,8 @@ object for the getPixel and getPixelAt methods.</p>
 </div>
 
                 
-                    <div id="method_fromInt" class="method item">
-    <h3 class="name"><code>fromInt</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>r</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>g</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>b</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>a</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Number</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-        <span class="flag static">static</span>
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/index.js.html#l408"><code>index.js:408</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>A utility to convert RGBA components to a 32 bit integer
-in RRGGBBAA format.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">r</code>
-                        <span class="type">Number</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the r color component (0 - 255)</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">g</code>
-                        <span class="type">Number</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the g color component (0 - 255)</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">b</code>
-                        <span class="type">Number</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the b color component (0 - 255)</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">a</code>
-                        <span class="type">Number</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the a color component (0 - 255)</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Number</span>:
-                    
-                    <p>a RGBA-packed 32 bit integer</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method_fromInt" class="method item">
-    <h3 class="name"><code>fromInt</code></h3>
+                    <div id="method_fromRGBA" class="method item">
+    <h3 class="name"><code>fromRGBA</code></h3>
 
     
         <div class="args">
@@ -987,7 +815,7 @@ in RRGGBBAA format.</p>
             
         
         
-        <a href="../files/index.js.html#l388"><code>index.js:388</code></a>
+        <a href="../files/index.js.html#l393"><code>index.js:393</code></a>
         
         </p>
 
@@ -1275,7 +1103,7 @@ position (from top left).</p>
             
         
         
-        <a href="../files/index.js.html#l304"><code>index.js:304</code></a>
+        <a href="../files/index.js.html#l309"><code>index.js:309</code></a>
         
         </p>
 
@@ -1438,7 +1266,7 @@ in <code>r, g, b, a</code>. If <code>out</code> is specified, it will use that i
             
         
         
-        <a href="../files/index.js.html#l330"><code>index.js:330</code></a>
+        <a href="../files/index.js.html#l335"><code>index.js:335</code></a>
         
         </p>
 
@@ -1621,7 +1449,7 @@ RGBA order is used.</p>
             
         
         
-        <a href="../files/index.js.html#l269"><code>index.js:269</code></a>
+        <a href="../files/index.js.html#l274"><code>index.js:274</code></a>
         
         </p>
 
@@ -1950,6 +1778,182 @@ position (from top left).</p>
 </div>
 
                 
+                    <div id="method_toRGBA" class="method item">
+    <h3 class="name"><code>toRGBA</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>r</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>g</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>b</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>a</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/index.js.html#l413"><code>index.js:413</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A utility to convert RGBA components to a 32 bit integer
+in RRGGBBAA format.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">r</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the r color component (0 - 255)</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">g</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the g color component (0 - 255)</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">b</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the b color component (0 - 255)</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">a</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the a color component (0 - 255)</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Number</span>:
+                    
+                    <p>a RGBA-packed 32 bit integer</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
                     <div id="method_unpackPixel" class="method item">
     <h3 class="name"><code>unpackPixel</code></h3>
 
@@ -2004,7 +2008,7 @@ position (from top left).</p>
             
         
         
-        <a href="../files/index.js.html#l344"><code>index.js:344</code></a>
+        <a href="../files/index.js.html#l349"><code>index.js:349</code></a>
         
         </p>
 
@@ -2133,7 +2137,7 @@ endian-independent method, use fromInt(rgba) and toInt(r, g, b, a).</p>
             
         
         
-        <a href="../files/index.js.html#l254"><code>index.js:254</code></a>
+        <a href="../files/index.js.html#l259"><code>index.js:259</code></a>
         
         </p>
 
@@ -2195,7 +2199,7 @@ this value will be null.</p>
             
         
         
-        <a href="../files/index.js.html#l242"><code>index.js:242</code></a>
+        <a href="../files/index.js.html#l247"><code>index.js:247</code></a>
         
         </p>
 

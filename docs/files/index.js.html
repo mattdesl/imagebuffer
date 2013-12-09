@@ -231,11 +231,16 @@ ImageBuffer.prototype.getColorAt = function(x, y, out) {
 };
 
 /**
- * Creates a new Image object from this ImageBuffer.
+ * Creates a new Image object from this ImageBuffer. You can pass 
+ * a context to re-use, otherwise this method will create a new canvas
+ * and get its 2d context. This method uses toDataURL to generate
+ * a new Image.
+ *
+ * Note that this is not supported on older 2.x Android devices.
  *
  * @method  createImage
- * @param  {[type]} context [description]
- * @return {[type]}         [description]
+ * @param  {CanvasRenderingContext} context the canvas 2D rendering context
+ * @return {Image}         a new Image object with the data URI of your ImageBuffer
  */
 ImageBuffer.prototype.createImage = function(context) {
     var canvas;
@@ -477,7 +482,7 @@ if (LITTLE_ENDIAN) {
  * A utility to convert an integer in 0xRRGGBBAA format to a color object.
  * This does not rely on endianness.
  *
- * @method  fromInt
+ * @method  fromRGBA
  * @static
  * @param  {Number} rgba an RGBA hex
  * @param  {Object} out the object to use, optional
@@ -497,7 +502,7 @@ ImageBuffer.fromRGBA = function(rgba, out) {
  * A utility to convert RGBA components to a 32 bit integer
  * in RRGGBBAA format.
  *
- * @method  fromInt
+ * @method  toRGBA
  * @static
  * @param  {Number} r the r color component (0 - 255)
  * @param  {Number} g the g color component (0 - 255)

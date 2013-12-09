@@ -112,25 +112,25 @@
         {
             "file": "index.js",
             "line": 145,
-            "description": "Creates a new Image object from this ImageBuffer.",
+            "description": "Creates a new Image object from this ImageBuffer. You can pass \na context to re-use, otherwise this method will create a new canvas\nand get its 2d context. This method uses toDataURL to generate\na new Image.\n\nNote that this is not supported on older 2.x Android devices.",
             "itemtype": "method",
             "name": "createImage",
             "params": [
                 {
                     "name": "context",
-                    "description": "[description]",
-                    "type": "[type]"
+                    "description": "the canvas 2D rendering context",
+                    "type": "CanvasRenderingContext"
                 }
             ],
             "return": {
-                "description": "[description]",
-                "type": "[type]"
+                "description": "a new Image object with the data URI of your ImageBuffer",
+                "type": "Image"
             },
             "class": "ImageBuffer"
         },
         {
             "file": "index.js",
-            "line": 192,
+            "line": 197,
             "description": "Applies this buffer's pixels to an ImageData object. If\nthe supplied ImageData is strictly equal to this buffer's\nImageData, and we are modifying pixels directly, then this call does\nnothing. \n\nYou can provide another ImageBuffer object, which essentially copies\nthis buffer's pixels to the specified ImageBuffer. If the specified ImageBuffer\nis \"directly\" modifying its own ImageData's pixels, then it should be updated\nimmediately.",
             "itemtype": "method",
             "name": "apply",
@@ -145,7 +145,7 @@
         },
         {
             "file": "index.js",
-            "line": 242,
+            "line": 247,
             "description": "Will be `true` if this context supports 32bit pixel\nmaipulation using array buffer views.",
             "itemtype": "attribute",
             "name": "SUPPORTS_32BIT",
@@ -157,7 +157,7 @@
         },
         {
             "file": "index.js",
-            "line": 254,
+            "line": 259,
             "description": "Will be `true` if little endianness was detected,\nor `false` if big endian was detected. If we could\nnot detect the endianness (e.g. typed arrays not\navailable, spec not implemented correctly), then\nthis value will be null.",
             "itemtype": "attribute",
             "name": "LITTLE_ENDIAN",
@@ -169,7 +169,7 @@
         },
         {
             "file": "index.js",
-            "line": 269,
+            "line": 274,
             "description": "Sets the pixel at the given index of the ImageBuffer's \"data\" array,\nwhich might be a Int32Array (modern browsers) or CanvasPixelArray (fallback),\ndepending on the context's capabilities. Also takes endianness into account.",
             "itemtype": "method",
             "name": "setPixel",
@@ -209,7 +209,7 @@
         },
         {
             "file": "index.js",
-            "line": 304,
+            "line": 309,
             "description": "Gets the pixel at the given index of the ImageBuffer's \"data\" array,\nwhich might be a Int32Array (modern browsers) or CanvasPixelArray (fallback),\ndepending on the context's capabilities. Also takes endianness into account.\n\nThe returned value is an object containing the color components as bytes (0-255)\nin `r, g, b, a`. If `out` is specified, it will use that instead to reduce object creation.",
             "itemtype": "method",
             "name": "getPixel",
@@ -238,7 +238,7 @@
         },
         {
             "file": "index.js",
-            "line": 330,
+            "line": 335,
             "description": "Packs the r, g, b, a components into a single integer, for use with\nInt32Array. If LITTLE_ENDIAN, then ABGR order is used. Otherwise,\nRGBA order is used.",
             "itemtype": "method",
             "name": "packPixel",
@@ -273,7 +273,7 @@
         },
         {
             "file": "index.js",
-            "line": 344,
+            "line": 349,
             "description": "Unpacks the r, g, b, a components into the specified color object, or a new\nobject, for use with Int32Array. If LITTLE_ENDIAN, then ABGR order is used when \nunpacking, otherwise, RGBA order is used. The resulting color object has the\n`r, g, b, a` properties which are unrelated to endianness.\n\nNote that the integer is assumed to be packed in the correct endianness. On little-endian\nthe format is 0xAABBGGRR and on big-endian the format is 0xRRGGBBAA. If you want a\nendian-independent method, use fromInt(rgba) and toInt(r, g, b, a).",
             "itemtype": "method",
             "name": "unpackPixel",
@@ -298,10 +298,10 @@
         },
         {
             "file": "index.js",
-            "line": 388,
+            "line": 393,
             "description": "A utility to convert an integer in 0xRRGGBBAA format to a color object.\nThis does not rely on endianness.",
             "itemtype": "method",
-            "name": "fromInt",
+            "name": "fromRGBA",
             "static": 1,
             "params": [
                 {
@@ -323,10 +323,10 @@
         },
         {
             "file": "index.js",
-            "line": 408,
+            "line": 413,
             "description": "A utility to convert RGBA components to a 32 bit integer\nin RRGGBBAA format.",
             "itemtype": "method",
-            "name": "fromInt",
+            "name": "toRGBA",
             "static": 1,
             "params": [
                 {
@@ -358,7 +358,7 @@
         },
         {
             "file": "index.js",
-            "line": 424,
+            "line": 429,
             "description": "A utility function to create a lightweight 'color'\nobject with the default components. Any components\nthat are not specified will default to zero.\n\nThis is useful when you want to use a shared color\nobject for the getPixel and getPixelAt methods.",
             "itemtype": "method",
             "name": "createColor",
