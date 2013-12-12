@@ -1,6 +1,6 @@
 {
   "name": "imagebuffer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fast per-pixel manipualtion in Canvas/WebGL",
   "main": "index.js",
   "scripts": {
