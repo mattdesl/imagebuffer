@@ -83,9 +83,9 @@
         {
             "file": "index.js",
             "line": 130,
-            "description": "This is a utility function to set the color at the specified X and Y \nposition (from top left).",
+            "description": "This is a utility function to get the color at the specified X and Y \nposition (from top left). You can specify a color object to reduce allocations.",
             "itemtype": "method",
-            "name": "getColorAt",
+            "name": "getPixelAt",
             "params": [
                 {
                     "name": "x",

@@ -216,16 +216,16 @@ ImageBuffer.prototype.setPixelAt = function(x, y, r, g, b, a) {
 };
 
 /**
- * This is a utility function to set the color at the specified X and Y 
- * position (from top left). 
+ * This is a utility function to get the color at the specified X and Y 
+ * position (from top left). You can specify a color object to reduce allocations.
  * 
- * @method  getColorAt
+ * @method  getPixelAt
  * @param {Number} x    the x position to modify
  * @param {Number} y    the y position to modify
  * @param {Number} out  the color object with &#x60;r, g, b, a&#x60; properties, or null
  * @return {Object} a color representing the pixel at that location
  */
-ImageBuffer.prototype.getColorAt = function(x, y, out) {
+ImageBuffer.prototype.getPixelAt = function(x, y, out) {
     var i = ~~(x + (y * this.width));
     return this.getPixel(i, out);
 };
