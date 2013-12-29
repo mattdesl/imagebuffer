@@ -290,9 +290,69 @@ if (SUPPORTS_32BIT) {
         ImageBuffer.prototype.setPixel = function(index, r, g, b, a) {
             this.pixels[index] = (a << 24) | (b << 16) | (g <<  8) | r;
         };
+
+
+        ImageBuffer.multiply = function(inputBuffer, outputBuffer, r, g, b, a) {
+            var rgba = (a << 24) | (b << 16) | (g << 8) | r;
+            var input = inputBuffer.pixels,
+                output = outputBuffer.pixels,
+                len = input.length,
+                a1, a2, b1, b2, g1, g2, r1, r2,
+                val;
+
+            for (var i=0; i<len; i++) {
+                val1 = input[i];
+
+                a1 = ((val1 & 0xff000000) >>> 24);
+                a2 = ((rgba & 0xff000000) >>> 24);
+                b1 = ((val1 & 0x00ff0000) >>> 16);
+                b2 = ((rgba & 0x00ff0000) >>> 16);
+                g1 = ((val1 & 0x0000ff00) >>> 8);
+                g2 = ((rgba & 0x0000ff00) >>> 8);
+                r1 = ((val1 & 0x000000ff));
+                r2 = ((rgba & 0x000000ff));
+                r  = r1 * r2 / 255;
+                g  = g1 * g2 / 255;
+                b  = b1 * b2 / 255;
+                a  = a1 * a2 / 255;
+
+                output[i] = (a << 24) | (b << 16) | (g << 8) | r;
+            }
+        };
     } else {
         ImageBuffer.prototype.setPixel = function(index, r, g, b, a) {
             this.pixels[index] = (r << 24) | (g << 16) | (b <<  8) | a;
+        };
+
+        ///TOOD: optimize with something like this:
+        ///rgba = ((rgba & 0xFF000000) * (rgba2 >> 24)) | (((rgba & 0x00FF0000) * ((rgba2 >> 16) & 0xFF))) | (((rgba) & 0x0000FF00) * ((rgba2 >> 8) & 0xFF)) | ((rgba & 0x000000FF) * (rgba2 & 0xFF));
+
+        ImageBuffer.multiply = function(inputBuffer, outputBuffer, r, g, b, a) {
+            var rgba = (r << 24) | (g << 16) | (b << 8) | a;
+            var input = inputBuffer.pixels,
+                output = outputBuffer.pixels,
+                len = input.length,
+                a1, a2, b1, b2, g1, g2, r1, r2,
+                val1;
+
+            for (var i=0; i<len; i++) {
+                val1 = input[i];
+
+                r1 = ((val1 & 0xff000000) >>> 24);
+                r2 = ((rgba & 0xff000000) >>> 24);
+                g1 = ((val1 & 0x00ff0000) >>> 16);
+                g2 = ((rgba & 0x00ff0000) >>> 16);
+                b1 = ((val1 & 0x0000ff00) >>> 8);
+                b2 = ((rgba & 0x0000ff00) >>> 8);
+                a1 = ((val1 & 0x000000ff));
+                a2 = ((rgba & 0x000000ff));
+                r  = r1 * r2 / 255;
+                g  = g1 * g2 / 255;
+                b  = b1 * b2 / 255;
+                a  = a1 * a2 / 255;
+                    
+                output[i] = (r << 24) | (g << 16) | (b << 8) | a;
+            }
         };
     }
 } else {
@@ -303,6 +363,19 @@ if (SUPPORTS_32BIT) {
         pixels[++index] = g;
         pixels[++index] = b;
         pixels[++index] = a;
+    };
+
+    ImageBuffer.prototype.multiply = function(inputBuffer, outputBuffer, r, g, b, a) {
+        var input = inputBuffer.pixels,
+            output = outputBuffer.pixels,
+            len = input.length;
+
+        for (var i=0; i<len; i+=4) {
+            output[i] = input[i] * r / 255;
+            output[i+1] = input[i+1] * g / 255;
+            output[i+2] = input[i+2] * b / 255;
+            output[i+3] = input[i+3] * a / 255;
+        }
     };
 }
 
@@ -361,6 +434,13 @@ ImageBuffer.prototype.getPixel = function(index, out) {
  * @param {Number} rgba the integer, packed in endian order by packPixel
  * @param {Number} out  the color object with `r, g, b, a` properties, or null
  * @return {Object} a color representing the pixel at that location
+ */
+
+
+/**
+ * A convenience funciton to multiply all pixels 
+ * in this image by the given r, g, b, a values.
+ * @return {[type]} [description]
  */
 if (LITTLE_ENDIAN) {
     ImageBuffer.packPixel = function(r, g, b, a) {
