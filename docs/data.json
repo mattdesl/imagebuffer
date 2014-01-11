@@ -209,7 +209,48 @@
         },
         {
             "file": "index.js",
-            "line": 309,
+            "line": 288,
+            "description": "This is a convenience method to multiply all of the\npixels in inputBuffer with the specified (r, g, b, a) bytes, \nand place the result into outputBuffer. It's assumed that\nboth buffers have the same size.",
+            "itemtype": "method",
+            "name": "multiply",
+            "static": 1,
+            "params": [
+                {
+                    "name": "inputBuffer",
+                    "description": "the input image data",
+                    "type": "ImageBuffer"
+                },
+                {
+                    "name": "inputBuffer",
+                    "description": "the output image data",
+                    "type": "ImageBuffer"
+                },
+                {
+                    "name": "r",
+                    "description": "the red byte, 0-255",
+                    "type": "Number"
+                },
+                {
+                    "name": "g",
+                    "description": "the green byte, 0-255",
+                    "type": "Number"
+                },
+                {
+                    "name": "b",
+                    "description": "the blue byte, 0-255",
+                    "type": "Number"
+                },
+                {
+                    "name": "a",
+                    "description": "the alpha byte, 0-255",
+                    "type": "Number"
+                }
+            ],
+            "class": "ImageBuffer"
+        },
+        {
+            "file": "index.js",
+            "line": 397,
             "description": "Gets the pixel at the given index of the ImageBuffer's \"data\" array,\nwhich might be a Int32Array (modern browsers) or CanvasPixelArray (fallback),\ndepending on the context's capabilities. Also takes endianness into account.\n\nThe returned value is an object containing the color components as bytes (0-255)\nin `r, g, b, a`. If `out` is specified, it will use that instead to reduce object creation.",
             "itemtype": "method",
             "name": "getPixel",
@@ -238,7 +279,7 @@
         },
         {
             "file": "index.js",
-            "line": 335,
+            "line": 423,
             "description": "Packs the r, g, b, a components into a single integer, for use with\nInt32Array. If LITTLE_ENDIAN, then ABGR order is used. Otherwise,\nRGBA order is used.",
             "itemtype": "method",
             "name": "packPixel",
@@ -273,7 +314,7 @@
         },
         {
             "file": "index.js",
-            "line": 349,
+            "line": 437,
             "description": "Unpacks the r, g, b, a components into the specified color object, or a new\nobject, for use with Int32Array. If LITTLE_ENDIAN, then ABGR order is used when \nunpacking, otherwise, RGBA order is used. The resulting color object has the\n`r, g, b, a` properties which are unrelated to endianness.\n\nNote that the integer is assumed to be packed in the correct endianness. On little-endian\nthe format is 0xAABBGGRR and on big-endian the format is 0xRRGGBBAA. If you want a\nendian-independent method, use fromRGBA(rgba) and toRGBA(r, g, b, a).",
             "itemtype": "method",
             "name": "unpackPixel",
@@ -298,7 +339,7 @@
         },
         {
             "file": "index.js",
-            "line": 393,
+            "line": 482,
             "description": "A utility to convert an integer in 0xRRGGBBAA format to a color object.\nThis does not rely on endianness.",
             "itemtype": "method",
             "name": "fromRGBA",
@@ -323,7 +364,7 @@
         },
         {
             "file": "index.js",
-            "line": 413,
+            "line": 502,
             "description": "A utility to convert RGBA components to a 32 bit integer\nin RRGGBBAA format.",
             "itemtype": "method",
             "name": "toRGBA",
@@ -358,7 +399,7 @@
         },
         {
             "file": "index.js",
-            "line": 429,
+            "line": 518,
             "description": "A utility function to create a lightweight 'color'\nobject with the default components. Any components\nthat are not specified will default to zero.\n\nThis is useful when you want to use a shared color\nobject for the getPixel and getPixelAt methods.",
             "itemtype": "method",
             "name": "createColor",

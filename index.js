@@ -285,6 +285,22 @@ ImageBuffer.LITTLE_ENDIAN = LITTLE_ENDIAN;
  * @param {Number} a the alpha byte, 0-255
  */
 
+/**
+ * This is a convenience method to multiply all of the
+ * pixels in inputBuffer with the specified (r, g, b, a) bytes, 
+ * and place the result into outputBuffer. It's assumed that
+ * both buffers have the same size.
+ *
+ * @method  multiply
+ * @static 
+ * @param {ImageBuffer} inputBuffer the input image data
+ * @param {ImageBuffer} inputBuffer the output image data
+ * @param {Number} r the red byte, 0-255
+ * @param {Number} g the green byte, 0-255
+ * @param {Number} b the blue byte, 0-255
+ * @param {Number} a the alpha byte, 0-255
+ */
+
 if (SUPPORTS_32BIT) {
     if (LITTLE_ENDIAN) {
         ImageBuffer.prototype.setPixel = function(index, r, g, b, a) {
@@ -365,11 +381,10 @@ if (SUPPORTS_32BIT) {
         pixels[++index] = a;
     };
 
-    ImageBuffer.prototype.multiply = function(inputBuffer, outputBuffer, r, g, b, a) {
+    ImageBuffer.multiply = function(inputBuffer, outputBuffer, r, g, b, a) {
         var input = inputBuffer.pixels,
             output = outputBuffer.pixels,
             len = input.length;
-
         for (var i=0; i<len; i+=4) {
             output[i] = input[i] * r / 255;
             output[i+1] = input[i+1] * g / 255;
@@ -436,12 +451,6 @@ ImageBuffer.prototype.getPixel = function(index, out) {
  * @return {Object} a color representing the pixel at that location
  */
 
-
-/**
- * A convenience funciton to multiply all pixels 
- * in this image by the given r, g, b, a values.
- * @return {[type]} [description]
- */
 if (LITTLE_ENDIAN) {
     ImageBuffer.packPixel = function(r, g, b, a) {
         return (a << 24) | (b << 16) | (g <<  8) | r;
