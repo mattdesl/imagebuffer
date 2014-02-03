@@ -210,7 +210,7 @@
         {
             "file": "index.js",
             "line": 288,
-            "description": "This is a convenience method to multiply all of the\npixels in inputBuffer with the specified (r, g, b, a) bytes, \nand place the result into outputBuffer. It's assumed that\nboth buffers have the same size.",
+            "description": "This is a convenience method to multiply all of the\npixels in inputBuffer with the specified (r, g, b, a) color, \nand place the result into outputBuffer. It's assumed that\nboth buffers have the same size.",
             "itemtype": "method",
             "name": "multiply",
             "static": 1,

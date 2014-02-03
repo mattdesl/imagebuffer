@@ -288,7 +288,7 @@ ImageBuffer.LITTLE_ENDIAN = LITTLE_ENDIAN;
 
 /**
  * This is a convenience method to multiply all of the
- * pixels in inputBuffer with the specified (r, g, b, a) bytes, 
+ * pixels in inputBuffer with the specified (r, g, b, a) color, 
  * and place the result into outputBuffer. It's assumed that
  * both buffers have the same size.
  *
