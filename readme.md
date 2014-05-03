@@ -1,3 +1,7 @@
+## update
+
+A note on performance. A wrapper/library like this will hamper the performance when you are doing millions of operations; to the point that it may even be worse than simple (unrolled) Uint8ClampedArray loop. Benchmark your application and see what needs tuning/unrolling. 
+
 #about 
 
 Fast per-pixel image manipulation with Canvas / WebGL. 
